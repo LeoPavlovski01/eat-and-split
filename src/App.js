@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const initialFriends = [
   {
     id: 118836,
@@ -20,10 +22,18 @@ const initialFriends = [
 ];
 
 export default function App() {
+  const [isAddFriendOpen, setIsAddFriendOpen] = useState(false);
+
+  function handleVisibilityFriendForm() {
+    setIsAddFriendOpen((open) => (open = !open));
+  }
+
   return (
     <div className="app">
       <div className="sidebar">
         <FriendList friends={initialFriends} />
+        <FormAddFriend visible={isAddFriendOpen}></FormAddFriend>
+        <Button onClick={handleVisibilityFriendForm}>Add Friend</Button>
       </div>
     </div>
   );
@@ -56,7 +66,33 @@ function Friend({ friend }) {
           </p>
         )}
         {friend.balance === 0 && <p>You and {friend.name} are even</p>}
+        <Button>Select</Button>
       </li>
     </>
+  );
+}
+
+function FormAddFriend({ visible }) {
+  //   2 important things , the url , the name
+  return (
+    <>
+      {visible && (
+        <form className="form-add-friend">
+          <span>Friend Name 🧑</span>
+          <input type="text" />
+          <span>Image URL 🖼 </span>
+          <input type="text" />
+          <Button>Add</Button>
+        </form>
+      )}
+    </>
+  );
+}
+
+function Button({ children, onClick }) {
+  return (
+    <button onClick={onClick} className="button">
+      {children}
+    </button>
   );
 }
