@@ -23,6 +23,7 @@ const initialFriends = [
 
 export default function App() {
   const [isAddFriendOpen, setIsAddFriendOpen] = useState(false);
+  const [selectedFriend, setSelectedFriend] = useState(null);
 
   function handleVisibilityFriendForm() {
     setIsAddFriendOpen((open) => (open = !open));
@@ -33,8 +34,11 @@ export default function App() {
       <div className="sidebar">
         <FriendList friends={initialFriends} />
         <FormAddFriend visible={isAddFriendOpen}></FormAddFriend>
-        <Button onClick={handleVisibilityFriendForm}>Add Friend</Button>
+        <Button onClick={handleVisibilityFriendForm}>
+          {isAddFriendOpen ? "Close" : "Add Friend"}
+        </Button>
       </div>
+      <FormSplitBill />
     </div>
   );
 }
@@ -86,6 +90,26 @@ function FormAddFriend({ visible }) {
         </form>
       )}
     </>
+  );
+}
+
+function FormSplitBill() {
+  return (
+    <form className="form-split-bill">
+      <h2>Split a bill with X</h2>
+      <span>Bill Value 💵 </span>
+      <input type="text" />
+      <span>Your expenses 🤯 </span>
+      <input type="text" />
+      <span>X's expenses 🤼</span>
+      <input disabled type="text" />
+      <span>🤑 Who is paying the bill?</span>
+      <select>
+        <option value="user">You</option>
+        <option value="friend">X</option>
+      </select>
+      <Button>Split bill</Button>
+    </form>
   );
 }
 
