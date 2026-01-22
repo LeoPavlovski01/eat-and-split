@@ -23,18 +23,24 @@ const initialFriends = [
 
 export default function App() {
   const [isAddFriendOpen, setIsAddFriendOpen] = useState(false);
-  const [selectedFriend, setSelectedFriend] = useState(null);
-
-  function handleVisibilityFriendForm() {
+  const [friends, setFriends] = useState(initialFriends);
+  function HandleVisivilityForm() {
     setIsAddFriendOpen((open) => (open = !open));
+  }
+  function HandleAddFriend(friend) {
+    setFriends((friends) => [...friends, friend]);
+    setIsAddFriendOpen(false);
   }
 
   return (
     <div className="app">
       <div className="sidebar">
-        <FriendList friends={initialFriends} />
-        <FormAddFriend visible={isAddFriendOpen}></FormAddFriend>
-        <Button onClick={handleVisibilityFriendForm}>
+        <FriendList friends={friends} />
+        <FormAddFriend
+          onAddFriend={HandleAddFriend}
+          visible={isAddFriendOpen}
+        ></FormAddFriend>
+        <Button onClick={HandleVisivilityForm}>
           {isAddFriendOpen ? "Close" : "Add Friend"}
         </Button>
       </div>
@@ -43,6 +49,13 @@ export default function App() {
   );
 }
 
+function Button({ children, onClick }) {
+  return (
+    <button onClick={onClick} className="button">
+      {children}
+    </button>
+  );
+}
 function FriendList({ friends }) {
   return (
     <ul>
@@ -76,16 +89,51 @@ function Friend({ friend }) {
   );
 }
 
-function FormAddFriend({ visible }) {
-  //   2 important things , the url , the name
+function FormAddFriend({ visible, onAddFriend }) {
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("https://i.pravatar.cc/48");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const id = crypto.randomUUID();
+
+    if (!name || !image) return;
+
+    const newFriend = {
+      name,
+      image: `${image}?=${id}`,
+      balance: 0,
+      id,
+    };
+    onAddFriend(newFriend);
+    setName("");
+    setImage("https://i.pravatar.cc/48");
+
+    console.log(newFriend);
+    // return initialFriends.map((friends) => [...friends, newFriend]);
+  }
   return (
     <>
       {visible && (
-        <form className="form-add-friend">
+        <form className="form-add-friend" onSubmit={handleSubmit}>
           <span>Friend Name 🧑</span>
-          <input type="text" />
+          <input
+            value={name}
+            onChange={(e) => {
+              console.log(e.target.value);
+              setName(e.target.value);
+            }}
+            type="text"
+          />
           <span>Image URL 🖼 </span>
-          <input type="text" />
+          <input
+            value={image}
+            onChange={(e) => {
+              console.log(e.target.value);
+              setImage(e.target.value);
+            }}
+            type="text"
+          />
           <Button>Add</Button>
         </form>
       )}
@@ -110,13 +158,5 @@ function FormSplitBill() {
       </select>
       <Button>Split bill</Button>
     </form>
-  );
-}
-
-function Button({ children, onClick }) {
-  return (
-    <button onClick={onClick} className="button">
-      {children}
-    </button>
   );
 }
