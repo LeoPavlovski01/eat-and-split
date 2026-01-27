@@ -1,3 +1,15 @@
+This project is a small React application built by following a tutorial as part of a React learning course.
+
+The app allows users to:
+- Manage a list of friends
+- Select and deselect a friend
+- Split a bill and update balances dynamically
+
+The main goal of this project is to practice core React concepts such as state management with hooks, prop drilling, conditional rendering, controlled inputs, and updating state immutably based on user interactions.
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
